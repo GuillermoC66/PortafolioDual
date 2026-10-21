@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: var(--primary);
+  --color-background: var(--background);
+  --color-text: var(--text);
+  --color-accent: var(--accent);
+}
+
+:root {
+  --primary: #ec4899;
+  --background: #ffffff;
+  --text: #1f2937;
+  --accent: #f472b6;
+}
+
+[data-theme='engineer'] {
+  --primary: #10b981;
+  --background: #0f172a;
+  --text: #f8fafc;
+  --accent: #34d399;
+}
+
+[data-theme='artist'] {
+  --primary: #ec4899;
+  --background: #fff1f2;
+  --text: #881337;
+  --accent: #fb7185;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
