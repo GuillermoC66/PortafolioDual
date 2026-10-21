@@ -75,7 +75,7 @@ export function CardCarousel({ projects, mode }: CardCarouselProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.45, delay: index * 0.08 }}
-              className="h-[430px] w-[min(84vw,370px)] shrink-0 snap-start"
+              className="h-[500px] w-[min(84vw,370px)] shrink-0 snap-start"
             >
               <ProjectCard project={project} mode={mode} />
             </motion.div>

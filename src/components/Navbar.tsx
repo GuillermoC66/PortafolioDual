@@ -5,7 +5,7 @@ export function Navbar() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="relative z-50 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5">
+    <header className="sticky top-0 z-50 mx-auto flex w-full max-w-7xl items-center justify-between border-b border-accent/10 bg-background/85 px-6 py-5 backdrop-blur-md">
       <a href="#home" className="text-sm font-black uppercase tracking-[0.18em] text-primary">
         memx.tv <span className="ml-2 font-medium tracking-normal text-text/50">/ {theme}</span>
       </a>

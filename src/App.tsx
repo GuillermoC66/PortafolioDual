@@ -3,9 +3,8 @@ import { portfolioData } from './data/portfolio';
 import { Navbar } from './components/Navbar';
 import { CardCarousel } from './components/CardCarousel.tsx';
 import { StickyCards } from './components/StickyCards.tsx';
+import { Footer } from './components/Footer';
 import { motion } from 'motion/react';
-
-const CURRENT_YEAR = new Date().getFullYear();
 
 function App() {
   const { theme } = useTheme();
@@ -89,12 +88,7 @@ function App() {
         </div>
       </main>
 
-      <footer className="mt-8 border-t border-accent/15 px-6 py-8">
-        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-3 text-sm text-text/50 sm:flex-row sm:items-center">
-          <p>© {CURRENT_YEAR} {currentIdentity.name}</p>
-          <p>Made with both sides of my brain.</p>
-        </div>
-      </footer>
+      <Footer name={currentIdentity.name} />
     </div>
   );
 }

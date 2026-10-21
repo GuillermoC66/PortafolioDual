@@ -5,6 +5,7 @@ export interface ProjectContent {
   description: string;
   image?: string;
   demoUrl?: string;
+  repoUrl?: string;
   tags: string[];
 }
 

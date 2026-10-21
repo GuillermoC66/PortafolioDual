@@ -29,63 +29,98 @@ export function ProjectCard({ project, mode }: ProjectCardProps) {
 
   const content = project[mode];
   if (!content) return null;
+  const isVideo = content.image?.split(/[?#]/, 1)[0].toLowerCase().endsWith('.mp4') ?? false;
+  const cardClassName = 'group flex h-full flex-col overflow-hidden rounded-xl border border-accent/20 bg-background shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-xl';
+  const cardContent = (
+    <>
+      <div className="relative block aspect-[1.45] w-full shrink-0 overflow-hidden bg-accent/10 text-left">
+        {content.image ? isVideo ? (
+          <video
+            src={content.image}
+            aria-label={`${content.title} video`}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <img
+            src={content.image}
+            alt={content.title}
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <div className="relative grid h-full place-items-center overflow-hidden bg-[#c9f0df] text-[#145a47]">
+            <div className="absolute size-56 rounded-full border border-[#145a47]/10 sm:size-64" />
+            <div className="absolute size-40 rounded-full border border-[#145a47]/15 sm:size-48" />
+            <div className="absolute size-24 rounded-full bg-[#78d5ad]/50 blur-xl sm:size-32" />
+            <Wind className="relative size-16 stroke-[1.15]" aria-hidden="true" />
+            <span className="absolute bottom-5 left-5 text-xs font-bold uppercase tracking-[0.2em]">
+              Breathe in / breathe out
+            </span>
+          </div>
+        )}
+        {content.demoUrl && (
+          <span className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full bg-[#123d32] px-4 py-2 text-xs font-semibold text-white shadow-lg transition-transform group-hover:scale-105">
+            Open live preview <ArrowUpRight size={15} />
+          </span>
+        )}
+      </div>
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
+        <h3 className="mb-2 text-2xl font-bold text-primary">{content.title}</h3>
+        <p className="mb-5 line-clamp-3 text-sm leading-relaxed text-text/75">
+          {content.description}
+        </p>
+        <div className="mt-auto flex flex-wrap gap-2">
+          {content.tags.map((tag) => (
+            <span
+              key={tag}
+              className="rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-medium text-accent"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+        {content.repoUrl && (
+          <span className="mt-5 inline-flex w-fit items-center gap-2 text-sm font-semibold text-accent transition-colors group-hover:text-primary">
+            View repository <ExternalLink size={15} aria-hidden="true" />
+          </span>
+        )}
+      </div>
+    </>
+  );
 
   return (
     <>
-      <article
-        className={`group flex h-full flex-col overflow-hidden rounded-xl border border-accent/20 bg-background shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-xl ${content.demoUrl ? 'cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent' : ''}`}
-        role={content.demoUrl ? 'button' : undefined}
-        tabIndex={content.demoUrl ? 0 : undefined}
-        aria-label={content.demoUrl ? `Open ${content.title} live preview` : undefined}
-        onClick={() => content.demoUrl && setIsDemoOpen(true)}
-        onKeyDown={(event) => {
-          if (content.demoUrl && (event.key === 'Enter' || event.key === ' ')) {
-            event.preventDefault();
-            setIsDemoOpen(true);
-          }
-        }}
-      >
-        <div className="relative block aspect-[1.45] w-full shrink-0 overflow-hidden bg-accent/10 text-left">
-          {content.image ? (
-            <img
-              src={content.image}
-              alt={content.title}
-              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-          ) : (
-            <div className="relative grid h-full place-items-center overflow-hidden bg-[#c9f0df] text-[#145a47]">
-              <div className="absolute size-56 rounded-full border border-[#145a47]/10 sm:size-64" />
-              <div className="absolute size-40 rounded-full border border-[#145a47]/15 sm:size-48" />
-              <div className="absolute size-24 rounded-full bg-[#78d5ad]/50 blur-xl sm:size-32" />
-              <Wind className="relative size-16 stroke-[1.15]" aria-hidden="true" />
-              <span className="absolute bottom-5 left-5 text-xs font-bold uppercase tracking-[0.2em]">
-                Breathe in / breathe out
-              </span>
-            </div>
-          )}
-          {content.demoUrl && (
-            <span className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full bg-[#123d32] px-4 py-2 text-xs font-semibold text-white shadow-lg transition-transform group-hover:scale-105">
-              Open live preview <ArrowUpRight size={15} />
-            </span>
-          )}
-        </div>
-        <div className="flex flex-1 flex-col p-5 sm:p-6">
-          <h3 className="mb-2 text-2xl font-bold text-primary">{content.title}</h3>
-          <p className="mb-5 line-clamp-3 text-sm leading-relaxed text-text/75">
-            {content.description}
-          </p>
-          <div className="mt-auto flex flex-wrap gap-2">
-            {content.tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-medium text-accent"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-      </article>
+      {content.repoUrl ? (
+        <a
+          href={content.repoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Open ${content.title} repository in a new tab`}
+          className="block h-full rounded-xl cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+        >
+          <article className={cardClassName}>{cardContent}</article>
+        </a>
+      ) : (
+        <article
+          className={`${cardClassName} ${content.demoUrl ? 'cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent' : ''}`}
+          role={content.demoUrl ? 'button' : undefined}
+          tabIndex={content.demoUrl ? 0 : undefined}
+          aria-label={content.demoUrl ? `Open ${content.title} live preview` : undefined}
+          onClick={() => content.demoUrl && setIsDemoOpen(true)}
+          onKeyDown={(event) => {
+            if (content.demoUrl && (event.key === 'Enter' || event.key === ' ')) {
+              event.preventDefault();
+              setIsDemoOpen(true);
+            }
+          }}
+        >
+          {cardContent}
+        </article>
+      )}
 
       <AnimatePresence>
         {isDemoOpen && content.demoUrl && (

@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
-import { Boxes, Film, Gamepad2, Globe2, Palette, Sparkles } from 'lucide-react';
+import { Boxes, Film, Gamepad2, Globe2, Palette, PencilIcon } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { Identity } from '../types/portfolio';
 
@@ -19,7 +19,7 @@ const PRACTICES: Record<Identity, PracticeCard[]> = {
   engineer: [
     {
       number: '01',
-      title: 'Worlds you can play.',
+      title: 'The collection of everything I know.',
       description: 'Game development is where systems become places, and mechanics become stories.',
       detail: 'GAME DEVELOPMENT / UNITY',
       Icon: Gamepad2,
@@ -30,7 +30,7 @@ const PRACTICES: Record<Identity, PracticeCard[]> = {
     {
       number: '02',
       title: 'The web, made human.',
-      description: 'I build thoughtful interfaces that make useful technology feel clear and alive.',
+      description: 'I build a user expericence that makes technology easy and enjoyable.',
       detail: 'WEB DEVELOPMENT / REACT',
       Icon: Globe2,
       background: '#d7e8dc',
@@ -40,7 +40,7 @@ const PRACTICES: Record<Identity, PracticeCard[]> = {
     {
       number: '03',
       title: 'Good ideas, engineered.',
-      description: 'From the first sketch to the final detail, I enjoy turning a rough idea into a working thing.',
+      description: 'From the first sketch to the final detail, I am business-oriented and enjoy turning a rough idea into a working thing for everyone involved.',
       detail: 'PROTOTYPING / SYSTEMS',
       Icon: Boxes,
       background: '#e8b07d',
@@ -51,9 +51,9 @@ const PRACTICES: Record<Identity, PracticeCard[]> = {
   artist: [
     {
       number: '01',
-      title: 'Color with a pulse.',
-      description: 'Watercolor studies shaped by texture, instinct, and the happy accidents of the medium.',
-      detail: 'WATERCOLOR / STUDIES',
+      title: 'I love what I see',
+      description: 'Watercolor is the medium that allows me to express how I feel, no need for exact presicion or realism.',
+      detail: 'WATERCOLOR / NATURE',
       Icon: Palette,
       background: '#f2c6bd',
       foreground: '#48251f',
@@ -61,18 +61,18 @@ const PRACTICES: Record<Identity, PracticeCard[]> = {
     },
     {
       number: '02',
-      title: 'A familiar world, reimagined.',
-      description: 'Fan art is a way to revisit the characters and stories that stay with me.',
-      detail: 'FAN ART / ILLUSTRATION',
-      Icon: Sparkles,
+      title: 'I love what I watch.',
+      description: 'Fanart is an outlet to appreciate the characters and stories that stay with me.',
+      detail: 'ILLUSTRATION / DIGITAL ART',
+      Icon: PencilIcon,
       background: '#d8c9e4',
       foreground: '#30243b',
       accent: '#71588a',
     },
     {
       number: '03',
-      title: 'Drawing in time.',
-      description: 'Small animations bring expressive gestures, characters, and ideas into motion.',
+      title: 'I love what I create.',
+      description: 'Animation is the most beautiful to create, it feels like making something that lives',
       detail: 'ANIMATION / MOTION',
       Icon: Film,
       background: '#d8dfb3',

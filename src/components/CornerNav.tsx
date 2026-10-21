@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUpRight, Menu, X } from 'lucide-react';
 
@@ -9,6 +10,14 @@ const LINKS = [
   { label: 'About', href: '#about' },
   { label: 'Practice', href: '#practice' },
   { label: 'Selected work', href: '#projects' },
+  
+];
+
+const SOCIAL_LINKS = [
+  { label: 'GitHub', href: 'https://github.com/GuillermoC66' },
+  { label: 'Instagram', href: 'https://www.instagram.com/memx.tv?srtk=Mm50M2FvcWZmazFu' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/guillermo-carrillo-r/' },
+
 ];
 
 export function CornerNav() {
@@ -37,15 +46,16 @@ export function CornerNav() {
         {isOpen ? <X size={19} /> : <Menu size={19} />}
       </button>
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
-            animate={{ opacity: 1, clipPath: 'inset(0 0 0% 0)' }}
-            exit={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-40 flex flex-col justify-center bg-background/95 px-8 backdrop-blur-xl sm:px-16"
-          >
+      {createPortal(
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
+              animate={{ opacity: 1, clipPath: 'inset(0 0 0% 0)' }}
+              exit={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="fixed inset-0 z-[60] flex flex-col justify-center bg-background/95 px-8 backdrop-blur-xl sm:px-16"
+            >
             <p className="absolute left-8 top-8 text-xs font-bold uppercase tracking-[0.2em] text-accent sm:left-16 sm:top-10">
               Portfolio / {CURRENT_YEAR}
             </p>
@@ -65,12 +75,31 @@ export function CornerNav() {
                 </motion.a>
               ))}
             </nav>
+            <div className="mx-auto mt-8 flex w-full max-w-5xl flex-col items-start gap-3 border-t border-accent/20 pt-5">
+              {SOCIAL_LINKS.map((link, index) => (
+                <motion.a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25 + index * 0.08, duration: 0.35 }}
+                  className="group inline-flex items-center gap-2 text-base font-medium text-text/70 transition-colors hover:text-primary sm:text-lg"
+                >
+                  {link.label}
+                  <ArrowUpRight className="size-4 text-accent transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </motion.a>
+              ))}
+            </div>
             <p className="absolute bottom-8 left-8 text-sm text-text/50 sm:bottom-10 sm:left-16">
               Art, engineering, and everything in between.
             </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </>
   );
 }
