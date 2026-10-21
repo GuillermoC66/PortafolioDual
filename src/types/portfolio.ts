@@ -3,7 +3,8 @@ export type Identity = 'artist' | 'engineer';
 export interface ProjectContent {
   title: string;
   description: string;
-  image: string;
+  image?: string;
+  demoUrl?: string;
   tags: string[];
 }
 

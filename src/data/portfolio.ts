@@ -48,6 +48,15 @@ export const portfolioData: PortfolioData = {
         image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop",
         tags: ["Go", "Kafka", "Docker"]
       }
+    },
+    {
+      id: 'rainbow-relax',
+      engineer: {
+        title: "Rainbow Relax",
+        description: "I contributed to Rainbow Relax, a breathing exercise experience created by The Trevor Project.",
+        demoUrl: "https://rainbowrelax.web.app/",
+        tags: ["The Trevor Project", "Web App", "Wellness"]
+      }
     }
   ]
 };

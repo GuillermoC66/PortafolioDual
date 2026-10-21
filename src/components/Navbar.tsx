@@ -1,22 +1,26 @@
 import { useTheme } from '../context/ThemeContext';
+import { CornerNav } from './CornerNav.tsx';
 
 export function Navbar() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <nav className="w-full max-w-5xl mx-auto flex items-center justify-between p-6">
-      <div className="text-xl font-bold text-primary uppercase tracking-widest">
-        {theme === 'artist' ? 'Artistic' : 'Engineer'}
-      </div>
-      
-      <div className="flex items-center gap-6">
+    <header className="relative z-50 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5">
+      <a href="#home" className="text-sm font-black uppercase tracking-[0.18em] text-primary">
+        memx.tv <span className="ml-2 font-medium tracking-normal text-text/50">/ {theme}</span>
+      </a>
+
+      <nav aria-label="Portfolio controls" className="flex items-center gap-3">
         <button
+          type="button"
           onClick={toggleTheme}
-          className="px-4 py-2 rounded-lg border border-accent text-accent hover:bg-accent hover:text-background transition-colors font-medium text-sm"
+          aria-label={`Switch to ${theme === 'artist' ? 'engineer' : 'artist'} mode`}
+          className="rounded-full border border-accent/30 px-4 py-2 text-xs font-semibold capitalize text-text transition-colors hover:border-accent hover:bg-accent/10 sm:text-sm"
         >
-          Switch to {theme === 'artist' ? 'Engineer' : 'Artist'}
+          View {theme === 'artist' ? 'engineer' : 'artist'} side
         </button>
-      </div>
-    </nav>
+        <CornerNav />
+      </nav>
+    </header>
   );
 }

@@ -1,7 +1,11 @@
 import { useTheme } from './context/ThemeContext';
 import { portfolioData } from './data/portfolio';
 import { Navbar } from './components/Navbar';
-import { ProjectCard } from './components/ProjectCard';
+import { CardCarousel } from './components/CardCarousel.tsx';
+import { StickyCards } from './components/StickyCards.tsx';
+import { motion } from 'motion/react';
+
+const CURRENT_YEAR = new Date().getFullYear();
 
 function App() {
   const { theme } = useTheme();
@@ -9,13 +13,47 @@ function App() {
   const currentIdentity = identities[theme];
 
   return (
-    <div className="min-h-screen bg-background text-text transition-colors duration-0 flex flex-col">
+    <div className="flex min-h-screen flex-col overflow-clip bg-background text-text transition-colors duration-300">
       <Navbar />
 
-      <main className="flex-grow container mx-auto px-6 py-12">
-        {/* Hero Section */}
-        <section className="text-center py-20 max-w-3xl mx-auto">
-          <div className="relative inline-block mb-8">
+      <main className="mx-auto w-full max-w-7xl flex-grow px-6">
+        <section id="home" className="grid min-h-[68vh] scroll-mt-24 items-center gap-12 py-16 md:grid-cols-[1.2fr_0.8fr] md:py-24">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+            id="about"
+            className="max-w-3xl"
+          >
+            <p className="mb-6 text-xs font-bold uppercase tracking-[0.22em] text-accent">
+              {theme === 'engineer' ? 'Engineer by logic / artist by instinct' : 'Artist by instinct / engineer by logic'}
+            </p>
+            <h1 className="max-w-3xl text-5xl font-bold leading-[0.98] text-primary sm:text-6xl md:text-7xl">
+              {currentIdentity.name}
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg leading-relaxed text-text/75 sm:text-xl">
+              {currentIdentity.bio}
+            </p>
+            <div className="mt-8 flex flex-wrap gap-2">
+              {currentIdentity.skills.map((skill) => (
+                <span
+                  key={skill}
+                  className="rounded-full border border-accent/25 px-4 py-2 text-sm font-medium text-text/80"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.12 }}
+            className="relative mx-auto w-full max-w-md"
+          >
+            <div className="absolute -inset-3 rotate-3 rounded-2xl border border-accent/30" aria-hidden="true" />
+            <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-accent/10">
             {currentIdentity.image.endsWith('.mp4') || currentIdentity.image.endsWith('.webm') ? (
               <video 
                 src={currentIdentity.image} 
@@ -23,53 +61,39 @@ function App() {
                 loop 
                 muted 
                 playsInline
-                className="w-32 h-32 rounded-full object-cover border-4 border-accent shadow-xl"
+                  className="h-full w-full object-cover"
               />
             ) : (
               <img 
                 src={currentIdentity.image} 
                 alt={currentIdentity.name}
-                className="w-32 h-32 rounded-full object-cover border-4 border-accent shadow-xl"
+                  className="h-full w-full object-cover"
               />
             )}
-          </div>
-          <h1 className="text-5xl md:text-6xl font-extrabold text-primary mb-6">
-            {currentIdentity.name}
-          </h1>
-          <p className="text-xl md:text-2xl text-text/80 leading-relaxed mb-8">
-            {currentIdentity.bio}
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            {currentIdentity.skills.map(skill => (
-              <span 
-                key={skill} 
-                className="px-4 py-2 bg-accent/10 text-accent rounded-full text-sm font-semibold border border-accent/20"
-              >
-                {skill}
-              </span>
-            ))}
-          </div>
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-6 pt-20 text-white">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
+                  {theme === 'engineer' ? 'The engineer' : 'The artist'}
+                </p>
+                <p className="mt-1 text-2xl font-semibold">One person, two practices.</p>
+              </div>
+            </div>
+          </motion.div>
         </section>
 
-        {/* Projects Section */}
-        <section className="py-20">
-          <div className="flex items-center justify-between mb-12">
-            <h2 className="text-3xl font-bold text-primary">
-              {theme === 'artist' ? 'Creative Works' : 'Technical Projects'}
-            </h2>
-            <div className="h-1 flex-grow mx-6 bg-accent/10 rounded-full hidden sm:block" />
-          </div>
+        <div className="border-t border-accent/15">
+          <StickyCards mode={theme} />
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map(project => (
-              <ProjectCard key={project.id} project={project} mode={theme} />
-            ))}
-          </div>
-        </section>
+        <div className="border-t border-accent/15 py-20">
+          <CardCarousel projects={projects} mode={theme} />
+        </div>
       </main>
 
-      <footer className="py-12 border-t border-accent/10 text-center text-text/50 text-sm">
-        <p>© {new Date().getFullYear()} {currentIdentity.name}. All rights reserved.</p>
+      <footer className="mt-8 border-t border-accent/15 px-6 py-8">
+        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-3 text-sm text-text/50 sm:flex-row sm:items-center">
+          <p>© {CURRENT_YEAR} {currentIdentity.name}</p>
+          <p>Made with both sides of my brain.</p>
+        </div>
       </footer>
     </div>
   );
