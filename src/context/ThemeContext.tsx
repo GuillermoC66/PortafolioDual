@@ -9,15 +9,26 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>(() => {
+const getSavedTheme = (): Theme => {
+  try {
     const saved = localStorage.getItem('portfolio-theme');
-    return (saved as Theme) || 'engineer';
-  });
+    return saved === 'artist' || saved === 'engineer' ? saved : 'engineer';
+  } catch (error) {
+    console.warn('Unable to read the saved theme from local storage.', error);
+    return 'engineer';
+  }
+};
+
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [theme, setTheme] = useState<Theme>(getSavedTheme);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('portfolio-theme', theme);
+    try {
+      localStorage.setItem('portfolio-theme', theme);
+    } catch (error) {
+      console.warn('Unable to save the theme to local storage.', error);
+    }
   }, [theme]);
 
   const toggleTheme = () => {
