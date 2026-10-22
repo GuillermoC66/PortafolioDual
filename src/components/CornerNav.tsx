@@ -6,7 +6,7 @@ import { ArrowUpRight, Menu, X } from 'lucide-react';
 const CURRENT_YEAR = new Date().getFullYear();
 
 const LINKS = [
-  { label: 'Home', href: '#home' },
+  { label: 'Home', href: '#' },
   { label: 'About', href: '#about' },
   { label: 'Practice', href: '#practice' },
   { label: 'Selected work', href: '#projects' },
