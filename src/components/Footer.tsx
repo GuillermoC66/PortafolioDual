@@ -1,12 +1,13 @@
 import { ArrowUpRight } from 'lucide-react';
+import { getLink, type LinkId } from '../data/links';
 
 const CURRENT_YEAR = new Date().getFullYear();
 
 const SOCIAL_LINKS = [
-  { label: 'GitHub', href: 'https://github.com/GuillermoC66' },
-  { label: 'Instagram', href: 'https://www.instagram.com/memx.tv?srtk=Mm50M2FvcWZmazFu' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/guillermo-carrillo-r/' },
-];
+  { label: 'GitHub', href: 'githubProfile' },
+  { label: 'Instagram', href: 'instagramProfile' },
+  { label: 'LinkedIn', href: 'linkedinProfile' },
+] satisfies { label: string; href: LinkId }[];
 
 interface FooterProps {
   name: string;
@@ -24,7 +25,7 @@ export function Footer({ name }: FooterProps) {
           {SOCIAL_LINKS.map((link) => (
             <a
               key={link.label}
-              href={link.href}
+              href={getLink(link.href)}
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-1.5 text-sm font-medium text-text/70 transition-colors hover:text-primary"

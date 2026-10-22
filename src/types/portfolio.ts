@@ -1,11 +1,13 @@
+import type { LinkId } from '../data/links';
+
 export type Identity = 'artist' | 'engineer';
 
 export interface ProjectContent {
   title: string;
   description: string;
-  image?: string;
-  demoUrl?: string;
-  repoUrl?: string;
+  image?: LinkId;
+  demoUrl?: LinkId;
+  repoUrl?: LinkId;
   tags: string[];
 }
 
@@ -20,7 +22,7 @@ export interface Project {
 export interface IdentityContent {
   name: string;
   bio: string;
-  image: string;
+  image: LinkId;
   skills: string[];
 }
 

@@ -1,28 +1,30 @@
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import { motion, useMotionValue, type Transition } from "motion/react";
 import type { Identity } from "../types/portfolio";
+import { getLink, type LinkId } from "../data/links";
 
-const IMAGES_BY_THEME: Record<Identity, string[]> = {
+const IMAGES_BY_THEME: Record<Identity, LinkId[]> = {
   artist: [
-    "https://res.cloudinary.com/drajm83r/image/upload/v1792552574/20260810.jpg",
-    "https://res.cloudinary.com/drajm83r/image/upload/v1792552739/20250826.jpg",
-    "https://res.cloudinary.com/drajm83r/image/upload/v1792552740/20250810.jpg",
-    "https://res.cloudinary.com/drajm83r/image/upload/v1792552784/2025-04-27.jpg",
-    "https://res.cloudinary.com/drajm83r/image/upload/v1792694156/BigPageComic.jpg",
-    "https://res.cloudinary.com/drajm83r/image/upload/v1792694881/2025-02-25_1.jpg",
-    "https://res.cloudinary.com/drajm83r/video/upload/v1792552769/2025-07-30_final.mp4",
+    "artistCarousel20260810",
+    "artistCarousel20250826",
+    "artistCarousel20250810",
+    "artistCarousel20250427",
+    "artistCarouselComic",
+    "artistCarousel20250225",
+    "artistAnimationVideo",
   ],
   engineer: [
-    "https://res.cloudinary.com/drajm83r/image/upload/v1792698825/20260415.png",
-    "https://res.cloudinary.com/drajm83r/image/upload/v1792700534/Screenshot_2026-10-22_141632.png",
-    "https://res.cloudinary.com/drajm83r/image/upload/v1792698840/sodvi_1.png",
-    "https://res.cloudinary.com/drajm83r/image/upload/v1792700014/github-6980894_1280.webp",
+    "engineerCarousel20260415",
+    "engineerCarouselLight",
+    "engineerCarouselScreenshot",
+    "engineerCarouselGithubIcon",
   ],
 };
 
 const ONE_SECOND = 1000;
 const AUTO_DELAY = ONE_SECOND * 10;
 const DRAG_BUFFER = 50;
+const PEEK_WIDTH = 72;
 
 const SPRING_OPTIONS = {
   type: "spring",
@@ -54,7 +56,7 @@ export const SwipeCarousel = ({ theme }: { theme: Identity }) => {
     width: window.innerWidth,
     height: window.innerHeight,
   }));
-  const images = IMAGES_BY_THEME[theme];
+  const images = IMAGES_BY_THEME[theme].map(getLink);
   const dragX = useMotionValue(0);
   const activeMediaSize = mediaSizes[images[imgIndex]];
   const slideWidth = viewportSize.width * 0.7;
@@ -135,9 +137,70 @@ export const SwipeCarousel = ({ theme }: { theme: Identity }) => {
 
       <Dots images={images} imgIndex={imgIndex} setImgIndex={setImgIndex} />
       <GradientEdges />
+      {imgIndex > 0 && (
+        <SidePeek
+          key={`left-${images[imgIndex - 1]}`}
+          src={images[imgIndex - 1]}
+          side="left"
+          height={activeHeight}
+          onClick={() => setImgIndex((index) => index - 1)}
+        />
+      )}
+      {imgIndex < images.length - 1 && (
+        <SidePeek
+          key={`right-${images[imgIndex + 1]}`}
+          src={images[imgIndex + 1]}
+          side="right"
+          height={activeHeight}
+          onClick={() => setImgIndex((index) => index + 1)}
+        />
+      )}
     </div>
   );
 };
+
+const SidePeek = ({
+  src,
+  side,
+  height,
+  onClick,
+}: {
+  src: string;
+  side: "left" | "right";
+  height: number;
+  onClick: () => void;
+}) => (
+  <motion.button
+    type="button"
+    aria-label={`Show ${side === "left" ? "previous" : "next"} image`}
+    onClick={onClick}
+    style={{ width: PEEK_WIDTH, height }}
+    initial={{ opacity: 0, x: side === "left" ? -PEEK_WIDTH : PEEK_WIDTH }}
+    animate={{ opacity: 0.5, x: 0 }}
+    transition={{ duration: 0.5, ease: "easeOut" }}
+    className={`absolute top-8 z-20 overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent ${
+      side === "left" ? "left-0 rounded-r-lg" : "right-0 rounded-l-lg"
+    }`}
+  >
+    {isVideo(src) ? (
+      <video
+        src={src}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="metadata"
+        className={`h-full w-full object-cover ${side === "left" ? "object-right" : "object-left"}`}
+      />
+    ) : (
+      <img
+        src={src}
+        alt=""
+        className={`h-full w-full object-cover ${side === "left" ? "object-right" : "object-left"}`}
+      />
+    )}
+  </motion.button>
+);
 
 const Images = ({
   images,
@@ -157,6 +220,29 @@ const Images = ({
           if (width > 0 && height > 0) onMediaLoad(imgSrc, width, height);
         };
 
+        const media = isVideo(imgSrc) ? (
+          <video
+            src={imgSrc}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            onLoadedMetadata={(event) =>
+              handleLoad(event.currentTarget.videoWidth, event.currentTarget.videoHeight)
+            }
+            className="block max-h-full max-w-full rounded-xl object-contain"
+          />
+        ) : (
+          <img
+            src={imgSrc}
+            alt=""
+            onLoad={(event) =>
+              handleLoad(event.currentTarget.naturalWidth, event.currentTarget.naturalHeight)
+            }
+            className="block max-h-full max-w-full rounded-xl object-contain"
+          />
+        );
         return (
           <div
             key={imgSrc}
@@ -166,31 +252,11 @@ const Images = ({
             <motion.div
               animate={{ scale: imgIndex === idx ? 0.95 : 0.85 }}
               transition={SPRING_OPTIONS}
-              className="flex h-full w-full items-center justify-center"
+              className={`flex h-full w-full items-center justify-center ${
+                imgIndex === idx ? "opacity-100" : "opacity-0"
+              }`}
             >
-              {isVideo(imgSrc) ? (
-                <video
-                  src={imgSrc}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="metadata"
-                  onLoadedMetadata={(event) =>
-                    handleLoad(event.currentTarget.videoWidth, event.currentTarget.videoHeight)
-                  }
-                  className="block max-h-full max-w-full rounded-xl object-contain"
-                />
-              ) : (
-                <img
-                  src={imgSrc}
-                  alt=""
-                  onLoad={(event) =>
-                    handleLoad(event.currentTarget.naturalWidth, event.currentTarget.naturalHeight)
-                  }
-                  className="block max-h-full max-w-full rounded-xl object-contain"
-                />
-              )}
+              {media}
             </motion.div>
           </div>
         );

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUpRight, ExternalLink, Wind, X } from 'lucide-react';
 import type { Project } from '../types/portfolio';
+import { getLink } from '../data/links';
 
 interface ProjectCardProps {
   project: Project;
@@ -29,14 +30,17 @@ export function ProjectCard({ project, mode }: ProjectCardProps) {
 
   const content = project[mode];
   if (!content) return null;
-  const isVideo = content.image?.split(/[?#]/, 1)[0].toLowerCase().endsWith('.mp4') ?? false;
+  const imageUrl = content.image ? getLink(content.image) : undefined;
+  const demoUrl = content.demoUrl ? getLink(content.demoUrl) : undefined;
+  const repoUrl = content.repoUrl ? getLink(content.repoUrl) : undefined;
+  const isVideo = imageUrl?.split(/[?#]/, 1)[0].toLowerCase().endsWith('.mp4') ?? false;
   const cardClassName = 'group flex h-full flex-col overflow-hidden rounded-xl border border-accent/20 bg-background shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-xl';
   const cardContent = (
     <>
       <div className="relative block aspect-[1.45] w-full shrink-0 overflow-hidden bg-accent/10 text-left">
-        {content.image ? isVideo ? (
+        {imageUrl ? isVideo ? (
           <video
-            src={content.image}
+            src={imageUrl}
             aria-label={`${content.title} video`}
             autoPlay
             muted
@@ -47,7 +51,7 @@ export function ProjectCard({ project, mode }: ProjectCardProps) {
           />
         ) : (
           <img
-            src={content.image}
+            src={imageUrl}
             alt={content.title}
             className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
@@ -62,7 +66,7 @@ export function ProjectCard({ project, mode }: ProjectCardProps) {
             </span>
           </div>
         )}
-        {content.demoUrl && (
+        {demoUrl && (
           <span className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full bg-[#123d32] px-4 py-2 text-xs font-semibold text-white shadow-lg transition-transform group-hover:scale-105">
             Open live preview <ArrowUpRight size={15} />
           </span>
@@ -83,7 +87,7 @@ export function ProjectCard({ project, mode }: ProjectCardProps) {
             </span>
           ))}
         </div>
-        {content.repoUrl && (
+        {repoUrl && (
           <span className="mt-5 inline-flex w-fit items-center gap-2 text-sm font-semibold text-accent transition-colors group-hover:text-primary">
             View repository <ExternalLink size={15} aria-hidden="true" />
           </span>
@@ -94,9 +98,9 @@ export function ProjectCard({ project, mode }: ProjectCardProps) {
 
   return (
     <>
-      {content.repoUrl ? (
+      {repoUrl ? (
         <a
-          href={content.repoUrl}
+          href={repoUrl}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`Open ${content.title} repository in a new tab`}
@@ -106,13 +110,13 @@ export function ProjectCard({ project, mode }: ProjectCardProps) {
         </a>
       ) : (
         <article
-          className={`${cardClassName} ${content.demoUrl ? 'cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent' : ''}`}
-          role={content.demoUrl ? 'button' : undefined}
-          tabIndex={content.demoUrl ? 0 : undefined}
-          aria-label={content.demoUrl ? `Open ${content.title} live preview` : undefined}
-          onClick={() => content.demoUrl && setIsDemoOpen(true)}
+          className={`${cardClassName} ${demoUrl ? 'cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent' : ''}`}
+          role={demoUrl ? 'button' : undefined}
+          tabIndex={demoUrl ? 0 : undefined}
+          aria-label={demoUrl ? `Open ${content.title} live preview` : undefined}
+          onClick={() => demoUrl && setIsDemoOpen(true)}
           onKeyDown={(event) => {
-            if (content.demoUrl && (event.key === 'Enter' || event.key === ' ')) {
+            if (demoUrl && (event.key === 'Enter' || event.key === ' ')) {
               event.preventDefault();
               setIsDemoOpen(true);
             }
@@ -123,7 +127,7 @@ export function ProjectCard({ project, mode }: ProjectCardProps) {
       )}
 
       <AnimatePresence>
-        {isDemoOpen && content.demoUrl && (
+        {isDemoOpen && demoUrl && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -151,7 +155,7 @@ export function ProjectCard({ project, mode }: ProjectCardProps) {
                 </div>
                 <div className="flex items-center gap-2">
                   <a
-                    href={content.demoUrl}
+                    href={demoUrl}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-2 rounded-full border border-accent/25 px-3 py-2 text-xs font-semibold text-text transition hover:bg-accent/10 sm:px-4"
@@ -170,7 +174,7 @@ export function ProjectCard({ project, mode }: ProjectCardProps) {
                 </div>
               </header>
               <iframe
-                src={content.demoUrl}
+                src={demoUrl}
                 title={`${content.title} website`}
                 className="min-h-0 flex-1 border-0 bg-white"
                 allow="fullscreen"

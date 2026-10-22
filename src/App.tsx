@@ -6,11 +6,13 @@ import { StickyCards } from './components/StickyCards.tsx';
 import { SwipeCarousel } from './components/SwipeCarousel';
 import { Footer } from './components/Footer';
 import { motion } from 'motion/react';
+import { getLink } from './data/links';
 
 function App() {
   const { theme } = useTheme();
   const { identities, projects } = portfolioData;
   const currentIdentity = identities[theme];
+  const identityImage = getLink(currentIdentity.image);
 
   return (
     <div className="flex min-h-screen flex-col overflow-clip bg-background text-text transition-colors duration-300">
@@ -54,9 +56,9 @@ function App() {
           >
             <div className="absolute -inset-3 rotate-3 rounded-2xl border border-accent/30" aria-hidden="true" />
             <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-accent/10">
-            {currentIdentity.image.endsWith('.mp4') || currentIdentity.image.endsWith('.webm') ? (
+            {identityImage.endsWith('.mp4') || identityImage.endsWith('.webm') ? (
               <video 
-                src={currentIdentity.image} 
+                src={identityImage}
                 autoPlay 
                 loop 
                 muted 
@@ -65,7 +67,7 @@ function App() {
               />
             ) : (
               <img 
-                src={currentIdentity.image} 
+                src={identityImage}
                 alt={currentIdentity.name}
                   className="h-full w-full object-cover"
               />
