@@ -37,7 +37,7 @@ export function ProjectCard({ project, mode }: ProjectCardProps) {
   const cardClassName = 'group flex h-full flex-col overflow-hidden rounded-xl border border-accent/20 bg-background shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-xl';
   const cardContent = (
     <>
-      <div className="relative block aspect-[1.45] w-full shrink-0 overflow-hidden bg-accent/10 text-left">
+      <div className="relative block min-h-[340px] aspect-[1.45] w-full shrink-0 overflow-hidden bg-accent/10 text-left">
         {imageUrl ? isVideo ? (
           <video
             src={imageUrl}
@@ -177,6 +177,8 @@ export function ProjectCard({ project, mode }: ProjectCardProps) {
                 src={demoUrl}
                 title={`${content.title} website`}
                 className="min-h-0 flex-1 border-0 bg-white"
+                loading="lazy"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
                 allow="fullscreen"
                 allowFullScreen
               />

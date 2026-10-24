@@ -6,7 +6,7 @@ export const portfolioData: PortfolioData = {
       name: "MEMX.TV L'ARISTE",
       bio: "Hago arte lol.",
       image: 'artistIdentityImage',
-      skills: ["Watercolor", "Animation", "Digital Art"]
+      skills: ["Watercolor", "Animation", "Digital Art", "Music"]
     },
     engineer: {
       name: "MEMX.TV",

@@ -2,6 +2,7 @@ export const links = {
   home: '#home',
   about: '#about',
   practice: '#practice',
+  contact: '#contact',
   projects: '#projects',
   githubProfile: 'https://github.com/GuillermoC66',
   instagramProfile: 'https://www.instagram.com/memx.tv?srtk=Mm50M2FvcWZmazFu',
@@ -17,12 +18,15 @@ export const links = {
   artistAnimationVideo: 'https://res.cloudinary.com/drajm83r/video/upload/v1792552769/2025-07-30_final.mp4',
   engineerCarousel20260415: 'https://res.cloudinary.com/drajm83r/image/upload/v1792705982/20260415.png',
   engineerCarouselLight: 'https://res.cloudinary.com/drajm83r/image/upload/v1792705927/light.png',
-  engineerCarouselScreenshot: 'https://res.cloudinary.com/drajm83r/image/upload/v1792700534/Screenshot_2026-10-22_141632.png',
   engineerCarouselGithubIcon: 'https://res.cloudinary.com/drajm83r/image/upload/v1792704592/github-white-icon.webp',
   engineerProjectScreenshot: 'https://res.cloudinary.com/drajm83r/image/upload/v1792597154/Screenshot_20260520_194511_Gallery.jpg',
   engineerProjectRepository: 'https://github.com/GuillermoC66/VR_GCR',
+  internaProjectRepository: 'https://github.com/GuillermoC66/Interna',
   engineerProjectDemo: 'https://rainbowrelax.web.app/',
   engineerProjectVideo: 'https://res.cloudinary.com/drajm83r/video/upload/v1792596864/prueba_item_get.mp4',
+  sodviWebsite: 'https://sodvi.com',
+  internaImage: 'https://res.cloudinary.com/drajm83r/image/upload/v1792808208/2024-04-05_item_get.png',
+  metroImage: 'https://res.cloudinary.com/drajm83r/image/upload/v1792705162/20260720.jpg',
 } as const;
 
 export type LinkId = keyof typeof links;
