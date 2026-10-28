@@ -14,6 +14,8 @@ concurrency:
 
 jobs:
   build:
+    environment:
+      name: github-pages
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -28,21 +30,21 @@ jobs:
       - name: Verify Supabase configuration
         run: |
           if [ -z "$VITE_SUPABASE_URL" ]; then
-            echo "::error::Missing VITE_SUPABASE_URL. Add it as a repository Actions variable."
+            echo "::error::Missing VITE_SUPABASE_URL. Add it as a github-pages environment secret."
             exit 1
           fi
           if [ -z "$VITE_SUPABASE_PUBLISHABLE_KEY" ]; then
-            echo "::error::Missing VITE_SUPABASE_PUBLISHABLE_KEY. Add it as a repository Actions variable."
+            echo "::error::Missing VITE_SUPABASE_PUBLISHABLE_KEY. Add it as a github-pages environment secret."
             exit 1
           fi
         env:
-          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
       - name: Build site
         run: npm run build
         env:
-          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

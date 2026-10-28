@@ -33,17 +33,18 @@ The guestbook uses the public `guestbook_messages` table. To set it up:
    `VITE_SUPABASE_PUBLISHABLE_KEY` for your Supabase project.
 2. Run [`supabase/schema.sql`](./supabase/schema.sql) in the Supabase SQL Editor
    to create the table and its row-level security policies.
-3. For GitHub Pages deployments, add repository **Actions variables** named
+3. For GitHub Pages deployments, create the **github-pages** environment under
+   **Settings → Environments** and add environment secrets named
    `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` with the same values.
-   The workflow injects them at build time; `.env` is intentionally not committed.
+   The workflow reads them during the build; `.env` is intentionally not committed.
 
 If the production guestbook says its Supabase URL or publishable key is missing,
-one or both repository variables were not available to the build. Add them under
-**Settings → Secrets and variables → Actions → Variables**, then rerun the
-**Deploy to GitHub Pages** workflow. The guestbook's missing-configuration
-message refers to these build-time variables; a missing database table causes a
-separate load error. The workflow checks both variables and fails before
-publishing if either is absent.
+one or both `github-pages` environment secrets were not available to the build.
+Add them under **Settings → Environments → github-pages → Environment secrets**,
+then rerun the **Deploy to GitHub Pages** workflow. The guestbook's
+missing-configuration message refers to these build-time values; a missing
+database table causes a separate load error. The workflow checks both values
+and fails before publishing if either is absent.
 
 The schema allows anyone to read and post short public guestbook messages. It
 does not permit public edits or deletes. Because posting is unauthenticated,
