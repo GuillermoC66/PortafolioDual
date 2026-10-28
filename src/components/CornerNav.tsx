@@ -19,7 +19,11 @@ const SOCIAL_LINKS = [
   { label: 'LinkedIn', href: 'linkedinProfile' },
 ] satisfies { label: string; href: LinkId }[];
 
-export function CornerNav() {
+interface CornerNavProps {
+  onOpenMessageBoard: () => void;
+}
+
+export function CornerNav({ onOpenMessageBoard }: CornerNavProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -81,6 +85,20 @@ export function CornerNav() {
                     <ArrowUpRight className="size-6 text-accent opacity-0 transition group-hover:opacity-100 sm:size-8" />
                   </motion.a>
                 ))}
+                <motion.button
+                  type="button"
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.08 * LINKS.length, duration: 0.35 }}
+                  onClick={() => {
+                    setIsOpen(false);
+                    onOpenMessageBoard();
+                  }}
+                  className="group flex w-full items-center justify-between border-b border-accent/20 py-3 text-left text-4xl font-semibold text-text transition-colors hover:text-primary sm:py-4 sm:text-6xl"
+                >
+                  Guestbook
+                  <ArrowUpRight className="size-6 text-accent opacity-0 transition group-hover:opacity-100 sm:size-8" />
+                </motion.button>
               </nav>
               <div className="mx-auto mt-8 flex w-full max-w-5xl flex-col items-start gap-3 border-t border-accent/20 pt-5">
                 {SOCIAL_LINKS.map((link, index) => (

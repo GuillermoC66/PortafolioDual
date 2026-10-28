@@ -25,6 +25,24 @@ switching the source to GitHub Actions, push to `main` and verify the latest
 **Deploy to GitHub Pages** workflow succeeds. The published HTML should load
 JavaScript and CSS from `/PortafolioDual/assets/`, not `/src/main.tsx`.
 
+## Supabase guestbook
+
+The guestbook uses the public `guestbook_messages` table. To set it up:
+
+1. Copy `.env.example` to `.env` and set `VITE_SUPABASE_URL` and
+   `VITE_SUPABASE_PUBLISHABLE_KEY` for your Supabase project.
+2. Run [`supabase/schema.sql`](./supabase/schema.sql) in the Supabase SQL Editor
+   to create the table and its row-level security policies.
+3. For GitHub Pages deployments, add repository **Actions variables** named
+   `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` with the same values.
+   The workflow injects them at build time; `.env` is intentionally not committed.
+
+The schema allows anyone to read and post short public guestbook messages. It
+does not permit public edits or deletes. Because posting is unauthenticated,
+add CAPTCHA or server-side rate limiting if spam becomes an issue. The
+publishable key is intended for browser use; never use a Supabase secret or
+service-role key in the client.
+
 ## Browser compatibility
 
 The JavaScript build targets ES2020. Tailwind CSS 4 requires modern CSS support;
