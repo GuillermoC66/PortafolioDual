@@ -123,7 +123,8 @@ export function MessageBoard({ mode }: MessageBoardProps) {
 
           {!supabase && (
             <p role="status" className="mt-6 rounded-lg border border-accent/20 bg-accent/5 p-4 text-sm text-text/70">
-              The guestbook needs Supabase environment variables and its database table before it can accept messages.
+              The guestbook can’t connect because its Supabase URL or publishable key is missing from this build.
+              Add VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY as GitHub Actions repository variables, then redeploy.
             </p>
           )}
 

@@ -37,6 +37,14 @@ The guestbook uses the public `guestbook_messages` table. To set it up:
    `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` with the same values.
    The workflow injects them at build time; `.env` is intentionally not committed.
 
+If the production guestbook says its Supabase URL or publishable key is missing,
+one or both repository variables were not available to the build. Add them under
+**Settings → Secrets and variables → Actions → Variables**, then rerun the
+**Deploy to GitHub Pages** workflow. The guestbook's missing-configuration
+message refers to these build-time variables; a missing database table causes a
+separate load error. The workflow checks both variables and fails before
+publishing if either is absent.
+
 The schema allows anyone to read and post short public guestbook messages. It
 does not permit public edits or deletes. Because posting is unauthenticated,
 add CAPTCHA or server-side rate limiting if spam becomes an issue. The
